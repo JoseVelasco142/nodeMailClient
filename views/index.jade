@@ -1,0 +1,10 @@
+extends layout
+
+block content
+    img#loading.hide(src='/images/loading.gif', alt='load icon')
+    #login.col-xs-12.col-sm-12.col-md-6.col-md-offset-3.col-lg-6.col-lg-offset-3
+        input#mail.col-xs-12.input-lg(type='email', required='', value='', placeholder="@")
+        input#password.col-xs-12.input-lg(type='password', required='', value='', placeholder=">_")
+        #loginBtn.col-xs-12.col-sm-12.btn.btn-default Log In &nbsp;
+            span.glyphicon.glyphicon-log-in
+        #loginError.col-xs-12.alert-danger.hide

@@ -1,0 +1,60 @@
+extends layout
+
+block content
+    nav.navbar.navbar-inverse
+        div.col-xs-10
+            span#mail Usuario:  &nbsp;
+                span#user= mail
+        button#logOut.btn.btn-default.col-xs-2
+            span.glyphicon.glyphicon-log-out
+
+    img#loadingInbox.hide(src='/images/loading.gif', alt='load icon')
+    #main.well-lg
+
+        #options.col-xs-12.col-sm-12.col-md-1.col-lg-1
+            div#newMail.col-xs-4.col-sm-4.col-md-12.col-lg-12.btn(data-target="#mailWriter", data-toggle='modal')
+                span.glyphicon.glyphicon-pencil(aria-hidden=true)
+            div#refreshMails.col-xs-4.col-sm-4.col-md-12.col-lg-12.btn
+                span.glyphicon.glyphicon-refresh(aria-hidden=true)
+            div#eraseMails.col-xs-4.col-sm-4.col-md-12.col-lg-12.btn
+                span.glyphicon.glyphicon-trash(aria-hidden=true)
+
+        #inbox.col-xs-12.col-sm-12.col-md-11.col-lg-11
+            #tableTitle.hidden-xs.hidden-sm.col-md-12.col-lg-12
+                div.col-xs-2
+                div.col-md-2 De:
+                div.col-xs-5 Asunto:
+                div.col-xs-3 Recibido:
+            #mailList.div.col-xs-12
+    #mailWriter.modal.fade(role="dialog")
+        .modal-dialog
+            .modal-content
+                .modal-backdrop
+                    div.well-lg
+                        div.viewerBlock.col-xs-12
+                            input#writerTo.viewerField.col-xs-12.info(type="email", placeholder="user@example.com")
+                        div.viewerBlock.col-xs-12
+                            input#writerSubject.col-xs-12.viewerField(type="text", placeholder="Asunto")
+                    div.viewerBlock.col-xs-12
+                        textarea#writerText.col-xs-12.viewerField(placeholder="Cuerpo del mensaje")
+                    button#writerClose.btn.col-xs-6(type="button", data-dismiss="modal") Cerrar
+                    button#writerSend.btn.btn-danger.col-xs-6(type="button") Enviar
+    #mailViewer.modal.fade(role="dialog")
+        .modal-dialog
+           .modal-content
+               .modal-backdrop
+                   div.well-lg
+                       div.viewerBlock.col-xs-12
+                           #viewerFrom.viewerField.col-xs-12.info
+                       div.viewerBlock.col-xs-12
+                           #viewerDate.viewerField
+                       div.viewerBlock.col-xs-12
+                           #viewerSubject.col-xs-12.viewerField
+                   div.viewerBlock.col-xs-12
+                       #viewerReader.col-xs-12.viewerField
+                   button#viewerClose.btn.col-xs-6(type="button", data-dismiss="modal") Cerrar
+                   div#idRead.hide
+                   button#viewerDelete.btn.col-xs-6(type="button", data-dismiss="modal") Eliminar
+
+
+
