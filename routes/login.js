@@ -7,7 +7,7 @@ var router = express.Router();
 var ldap  = require('ldapjs');
 var SUFFIX = "dc=jvp,dc=com";
 var client = ldap.createClient({
-    url: 'ldap://192.168.1.200',
+    url: 'ldap://mail.jvp.com',
     timeout: 5000,
     connectTimeout: -1
     });

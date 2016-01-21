@@ -3,7 +3,7 @@ var router = express.Router();
 var Client = require('node-poplib-gowhich').Client;
 var port = 110;
 var smtpPort = 25;
-var host = "192.168.1.200";
+var host = "mail.jvp.com";
 var SMTPConnection = require('smtp-connection');
 var options = {
     port: smtpPort,
