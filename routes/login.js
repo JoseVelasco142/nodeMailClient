@@ -25,6 +25,7 @@ router.post('/', function(req, res) {
             scope: 'sub'
         };
         var userDn = 'cn='+req.body.mail.split('@')[0]+',ou='+CONNECTION.USERS_LDAP_OU+','+CONNECTION.LDAP_SUFFIX;
+        client.bind(userDn, req.body.password, function(err) {
             if(err) console.log(err.message);
         });
         client.search('ou='+CONNECTION.USERS_LDAP_OU+','+CONNECTION.LDAP_SUFFIX, loginFilter, function(err, response) {
