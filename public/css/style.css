@@ -123,7 +123,7 @@ nav #user {
             background: lightcyan;
         }
         #mailList {
-            height: 600px;
+            height: 420px;
             overflow-y: scroll;
         }
         /* MAIL BUTTONS */
@@ -176,6 +176,7 @@ nav #user {
     padding: 1.5%;
     border-radius: 30px;
     height: 45%;
+    color: indianred;
 }
 #mailViewer .viewerBlock {
     margin: 1.5%;

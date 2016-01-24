@@ -13,6 +13,7 @@ var inbox = require('./routes/inbox');
 
 // EXPRESS
 var app = express();
+var CONNECTION = {};
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

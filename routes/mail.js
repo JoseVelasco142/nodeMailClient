@@ -3,20 +3,15 @@ var router = express.Router();
 var Client = require('node-poplib-gowhich').Client;
 var port = 110;
 var smtpPort = 25;
-var host = "mail.jvp.com";
+var host = "10.10.2.200";
+var CONNECTION = require('./connection_params.js');
 var SMTPConnection = require('smtp-connection');
-var options = {
-    port: smtpPort,
-    host: host,
-    secure: false,
-    debug: true
-};
 
 router.post('/', function(req, res) {
    if((req.body.getMails) && (req.session.mail)) {
        var client = new Client({
-           hostname: host,
-           port:  port,
+           hostname: CONNECTION.HOST,
+           port:  CONNECTION.POP3_PORT,
            tls: false,
            mailparser: true,
            username: req.session.mail,
@@ -45,33 +40,32 @@ router.post('/', function(req, res) {
        });
    }
    else if (req.body.sendMail) {
+       var options = {
+           port: CONNECTION.SMTP_PORT,
+           host: host,
+           secure: false,
+           debug: true
+       };
        var connection = new SMTPConnection(options);
+       connection.connect(function(){
+           console.log("smtp_connected");
+       });
        var env = {
            from: req.session.mail,
            to: req.body.to
        };
-       var message = "subject: "+req.body.subject+"\r\n"+ req.body.text;
-       connection.connect(function(){
-           console.log("connected");
-       });
+       var message = "subject: "+req.body.subject+"\r\n"+ req.body.text+"\r\n .";
        setTimeout(function(){
            connection.send(env, message, function(err, info) {
-               console.log(err);
-               console.log(info);
-               if(err){
-                   res.send('1');
-                   connection.close();
-               }
-               if(info) {
-                   res.send('0');
-                   connection.close();
-               }
+               connection.close();
+               res.send('0');
            });
        }, 1000);
 
    } else if (req.body.deleteMail) {
        var mail = req.body.idMail;
-       var client = new Client({
+       //noinspection JSDuplicatedDeclaration
+       var clientDel  = new Client({
            hostname: host,
            port:  port,
            tls: false,
@@ -79,11 +73,10 @@ router.post('/', function(req, res) {
            username: req.session.mail,
            password: req.session.password
        });
-       console.log("A BORRAR- "+mail);
-       client.connect(function() {
-          client.delete(mail, function(err, msgs){
+       clientDel.connect(function() {
+           clientDel.delete(mail, function(err, msgs){
               if(err == null) {
-                  client.quit();
+                  clientDel.quit();
                   res.send('0');
               } else {
                   res.send('1');

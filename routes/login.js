@@ -3,15 +3,15 @@
  */
 var express = require('express');
 var router = express.Router();
-
+var CONNECTION = require('./connection_params.js');
 var ldap  = require('ldapjs');
-var SUFFIX = "dc=jvp,dc=com";
+
 var client = ldap.createClient({
-    url: 'ldap://mail.jvp.com',
+    url: 'ldap://'+CONNECTION.HOST,
     timeout: 5000,
     connectTimeout: -1
     });
-    client.bind('cn=admin,'+SUFFIX, '1', function(err) {
+    client.bind('cn=admin,'+CONNECTION.LDAP_SUFFIX, '1', function(err) {
         if(err) console.log(err);
     });
 
@@ -20,10 +20,13 @@ router.post('/', function(req, res) {
         var mail = req.body.mail;
         var password = req.body.password;
         var loginFilter = {
-            filter: '(&(objectClass=CourierMailAccount)(mail='+mail+')(userPassword='+password+'))',
+            filter: '(&(objectClass='+CONNECTION.FILTER_LDAP
+                    +')('+CONNECTION.MAIL
+                    +'='+mail+')('+CONNECTION.PASSWORD
+                    +'='+password+'))',
             scope: 'sub'
         };
-        client.search('ou=People,'+SUFFIX, loginFilter, function(err, response) {
+        client.search('ou=People,'+CONNECTION.LDAP_SUFFIX, loginFilter, function(err, response) {
             var entries = [];
             response.on('searchEntry', function(entry) {
                 entries.push(entry.object);

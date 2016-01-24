@@ -82,7 +82,7 @@ MAIL.prototype = ({
             date = mail.date.split('T')[0];
             hour = mail.date.split('T')[1].split('.')[0];
             count++;
-            mailTemplate =
+            var mailTemplate =
                 '<div class="col-xs-12 mail">' +
                     '<div class="col-xs-1  mailButtons">' + //BUTTONS
                         '<div class="col-xs-12 col-sm-12 col-md-6 co-lg-6">' + //READ
@@ -130,42 +130,58 @@ MAIL.prototype = ({
     },
     writeMail: function(){
         $('#mailWriter').fadeIn();
+
     },
     sendMail: function(){
         var loadingIcon =  $('#loadingInbox');
-        var to = $('#writerTo') ;
+        var cnt = 0;
+        var to = $('#writerTo');
         var subject = $('#writerSubject');
         var text = $('#writerText');
-        if ((text.val() != '') && (subject.val() != '') && (to.val() !='')) {
-            $.ajax({
-                    type: 'POST',
-                    url: "http://localhost:3000/mail",
-                    data: {
-                        sendMail: true,
-                        to: to.val(),
-                        subject: subject.val(),
-                        text: text.val()
-                    },
-                    beforeSend: function(){
-                        loadingIcon.toggleClass('hide');
-                    }
-                })
-                .done(function (res) {
-                    if (res == '0') {
-                        $('#mailWriter').modal('toggle');
-                        loadingIcon.toggleClass('hide');
-                        to.val("");
-                        subject.val("");
-                        text.val("");
-                        MAIL.prototype.refreshMail();
-                    } else {
-                        loadingIcon.toggleClass('hide');
-                        alert("Dirección erronea o error del servidor");
-                    }
-                })
-        } else {
-            alert("Todos los campos son requeridos");
+        if(to.val() == "")
+            to.css('background', 'indianred');
+        else {
+            cnt++;
+            to.css('background', 'lightblue');
         }
+        if(subject.val() == "")
+            subject.css('background', 'indianred');
+        else {
+            cnt++;
+            subject.css('background', 'lightblue');
+        }
+        if(text.val() == "")
+            text.css('background', 'indianred');
+        else {
+            cnt++;
+            text.css('background', 'lightblue');
+        }
+       if(cnt==3){
+           $.ajax({
+               type: 'POST',
+               url: "http://localhost:3000/mail",
+               async: false,
+               data: {
+                   sendMail: true,
+                   to: to.val(),
+                   subject: subject.val(),
+                   text: text.val()
+               }
+           })
+           .done(function (res) {
+               if (res == '0') {
+                   $('#mailWriter').click();
+                   loadingIcon.toggleClass('hide');
+                   to.val("");
+                   subject.val("");
+                   text.val("");
+                   setTimeout(function(){
+                       loadingIcon.toggleClass('hide');
+                       alert("Mensaje enviado correctamente")
+                   }, 1500);
+               }
+           });
+       }
     },
     deleteMail: function(idMail){
         var loadingIcon = $('#loadingInbox');
