@@ -11,9 +11,7 @@ var client = ldap.createClient({
     timeout: 5000,
     connectTimeout: -1
     });
-    client.bind('cn=admin,'+CONNECTION.LDAP_SUFFIX, '1', function(err) {
-        if(err) console.log(err);
-    });
+
 
 router.post('/', function(req, res) {
     if(req.body.login) {
@@ -26,7 +24,13 @@ router.post('/', function(req, res) {
                     +'='+password+'))',
             scope: 'sub'
         };
-        client.search('ou=People,'+CONNECTION.LDAP_SUFFIX, loginFilter, function(err, response) {
+        var userDn = 'cn='+req.body.mail.split('@')[0]+',ou='+CONNECTION.USERS_LDAP_OU+','+CONNECTION.LDAP_SUFFIX;
+        console.log(userDn);
+        client.bind(userDn, req.body.password, function(err) {
+            console.log("auth");
+            if(err) console.log(err.message);
+        });
+        client.search('ou='+CONNECTION.USERS_LDAP_OU+','+CONNECTION.LDAP_SUFFIX, loginFilter, function(err, response) {
             var entries = [];
             response.on('searchEntry', function(entry) {
                 entries.push(entry.object);

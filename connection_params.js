@@ -13,6 +13,7 @@
         POP3_PORT: 110,
         LDAP_SUFFIX: "dc=jvp,dc=com",
         FILTER_LDAP: "CourierMailAccount",
+        USERS_LDAP_OU: "People",
         MAIL: "mail",
         PASSWORD: 'userPassword'
     };
