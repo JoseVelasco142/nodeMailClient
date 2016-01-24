@@ -4,7 +4,7 @@ var Client = require('node-poplib-gowhich').Client;
 var port = 110;
 var smtpPort = 25;
 var host = "10.10.2.200";
-var CONNECTION = require('./connection_params.js');
+var CONNECTION = require('../connection_params.js');
 var SMTPConnection = require('smtp-connection');
 
 router.post('/', function(req, res) {

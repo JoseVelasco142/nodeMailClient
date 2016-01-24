@@ -3,7 +3,7 @@
  */
 var express = require('express');
 var router = express.Router();
-var CONNECTION = require('./connection_params.js');
+var CONNECTION = require('../connection_params.js');
 var ldap  = require('ldapjs');
 
 var client = ldap.createClient({
